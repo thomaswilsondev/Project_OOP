@@ -216,6 +216,10 @@ class ControllProduct
 {
 private:
     vector<Product> ProductList;
+    int AutoID()
+    {
+        return this->ProductList.back().getProductId() + 1;
+    }
 
 public:
     // contructor
@@ -227,6 +231,14 @@ public:
     // Display product list
     void Display()
     {
+        cout << setw(5) << left << "ID"
+             << setw(20) << left << "Ten sanp pham"
+             << setw(20) << left << "Loai san pham"
+             << setw(30) << left << "Mo ta"
+             << setw(15) << left << "Gia"
+             << setw(8) << left << "Ton kho"
+             << endl;
+
         for (int i = 0; i < this->ProductList.size(); i++)
         {
             cout << setw(5) << left << this->ProductList[i].getProductId()
@@ -241,14 +253,44 @@ public:
 
     // Add item into product list
 
-    void addProduct(Product item)
+    void addProduct()
     {
-        this->ProductList.push_back(item);
+        int n;
+        string productName;
+        string productType;
+        string description;
+        float price;
+        int inventory;
+
+        cout << "So luong san pham muon them: ";
+        cin >> n;
+
+        for (int i = 0; i < n; i++)
+        {
+            cin.ignore(32767, '\n');
+            cout << "San pham " << i + 1 << endl;
+            cout << "Nhap ten san pham: ";
+            getline(cin, productName);
+            cout << "Nhap loai san pham: ";
+            getline(cin, productType);
+            cout << "Nhap mo ta san pham: ";
+            getline(cin, description);
+            cout << "Nhap gia san pham: ";
+            cin >> price;
+            cout << "Nhap so luong ton kho: ";
+            cin >> inventory;
+
+            Product item(this->AutoID(), productName, productType, description, price, inventory);
+            this->ProductList.push_back(item);
+        }
     }
 
     // Remove item form product list
-    void removeProduct(int idRemovedProduct)
+    void removeProduct()
     {
+        int idRemovedProduct;
+        cout << "Nhap ID san pham can xoa: ";
+        cin >> idRemovedProduct;
         for (int i = 0; i < this->ProductList.size(); i++)
         {
             if (this->ProductList[i].getProductId() == idRemovedProduct)
@@ -264,17 +306,19 @@ int main()
 {
     string filename = "product.csv";
     ProductFile data;
+    vector<Product> dataProduct = data.loadProduct(filename);
+
     cout << "Dau vao" << endl;
-    ControllProduct controller(data.loadProduct(filename));
+    ControllProduct controller();
     controller.Display();
 
     cout << "\n\nSau khi them" << endl;
 
-    controller.addProduct(Product(7, "Cat", "Cat bien vung tau", "Cat ok xay nha bao dep", 1000, 100));
+    controller.addProduct();
     controller.Display();
 
     cout << "\n\nSau khi xoa" << endl;
-    controller.removeProduct(5);
+    controller.removeProduct();
     controller.Display();
 
     return 0;
