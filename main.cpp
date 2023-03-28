@@ -362,8 +362,6 @@ class Product
 private:
     int productId;
     string productName;
-    string productType;
-    string description;
     float price;
     int inventory;
 
@@ -378,16 +376,6 @@ public:
     string getProductName()
     {
         return this->productName;
-    };
-
-    string getProductType()
-    {
-        return this->productType;
-    };
-
-    string getDescription()
-    {
-        return this->description;
     };
 
     float getPrice()
@@ -411,16 +399,6 @@ public:
         this->productName = productName;
     };
 
-    void setProductType(string productType)
-    {
-        this->productType = productType;
-    };
-
-    void setDescription(string description)
-    {
-        this->description = description;
-    };
-
     void setPrice(float price)
     {
         this->price = price;
@@ -432,12 +410,10 @@ public:
     };
     // Contructor
 
-    Product(int productId, string productName, string productType, string description, float price, int inventory)
+    Product(int productId, string productName, float price, int inventory)
     {
         this->productId = productId;
         this->productName = productName;
-        this->productType = productType;
-        this->description = description;
         this->price = price;
         this->inventory = inventory;
     }
@@ -455,8 +431,6 @@ public:
         vector<Product> ProductList;
         int productId;
         string productName;
-        string productType;
-        string description;
         float price;
         int inventory;
 
@@ -475,14 +449,12 @@ public:
                 getline(ss, data, ',');
                 productId = stoi(data);
                 getline(ss, productName, ',');
-                getline(ss, productType, ',');
-                getline(ss, description, ',');
                 getline(ss, data, ',');
                 price = stof(data);
                 getline(ss, data, ',');
                 inventory = stoi(data);
 
-                ProductList.push_back(Product(productId, productName, productType, description, price, inventory));
+                ProductList.push_back(Product(productId, productName, price, inventory));
             }
         }
         input.close();
@@ -504,8 +476,6 @@ public:
             {
                 output << ProductList[i].getProductId() << ","
                        << ProductList[i].getProductName() << ","
-                       << ProductList[i].getProductType() << ","
-                       << ProductList[i].getDescription() << ","
                        << ProductList[i].getPrice() << ","
                        << ProductList[i].getInventory() << endl;
             }
@@ -534,21 +504,17 @@ public:
     void Display()
     {
         cout << setw(5) << left << "ID"
-             << setw(20) << left << "Ten sanp pham"
-             << setw(20) << left << "Loai san pham"
-             << setw(30) << left << "Mo ta"
-             << setw(15) << left << "Gia"
-             << setw(8) << left << "Ton kho"
+             << setw(100) << left << "Ten sanp pham"
+             << setw(10) << left << "Gia"
+             << setw(10) << left << "Ton kho"
              << endl;
 
         for (int i = 0; i < this->ProductList.size(); i++)
         {
             cout << setw(5) << left << this->ProductList[i].getProductId()
-                 << setw(20) << left << this->ProductList[i].getProductName()
-                 << setw(20) << left << this->ProductList[i].getProductType()
-                 << setw(30) << left << this->ProductList[i].getDescription()
-                 << setw(15) << left << this->ProductList[i].getPrice()
-                 << setw(8) << left << this->ProductList[i].getInventory()
+                 << setw(100) << left << this->ProductList[i].getProductName()
+                 << setw(10) << left << this->ProductList[i].getPrice()
+                 << setw(10) << left << this->ProductList[i].getInventory()
                  << endl;
         }
     }
@@ -559,8 +525,6 @@ public:
     {
         int n;
         string productName;
-        string productType;
-        string description;
         float price;
         int inventory;
 
@@ -573,16 +537,12 @@ public:
             cout << "San pham " << i + 1 << endl;
             cout << "Nhap ten san pham: ";
             getline(cin, productName);
-            cout << "Nhap loai san pham: ";
-            getline(cin, productType);
-            cout << "Nhap mo ta san pham: ";
-            getline(cin, description);
             cout << "Nhap gia san pham: ";
             cin >> price;
             cout << "Nhap so luong ton kho: ";
             cin >> inventory;
 
-            Product item(this->AutoID(), productName, productType, description, price, inventory);
+            Product item(this->AutoID(), productName, price, inventory);
             this->ProductList.push_back(item);
         }
     }
@@ -597,11 +557,10 @@ public:
         {
             if (this->ProductList[i].getProductId() == idRemovedProduct)
             {
-                ProductList.erase(ProductList.begin() + i);
+                this->ProductList.erase(this->ProductList.begin() + i);
                 return;
             }
         }
-        cout << "San pham khong ton tai" << endl;
     }
 };
 
@@ -621,24 +580,283 @@ public:
 
     // Method
 
-    void addEmployee(Employee employee)
+    // Manage Employee
+    void loadEmployee(string filename)
     {
-        this->employeesList.push_back(employee);
+        vector<Employee> EmployeeList;
+        int employeeID;
+        string position;
+        float salary;
+        string dateOfHire;
+        string name;
+        string dateOfBirth;
+        string address;
+        string phone;
+        string email;
+        string data;
+
+        fstream input(filename);
+        if (!input.is_open())
+        {
+            cout << "Can not read file!!!" << endl;
+        }
+        else
+        {
+            string line, data;
+            while (getline(input, line))
+            {
+                stringstream ss(line);
+
+                getline(ss, data, ',');
+                employeeID = stoi(data);
+                getline(ss, position, ',');
+                getline(ss, data, ',');
+                salary = stof(data);
+                getline(ss, dateOfHire, ',');
+                getline(ss, name, ',');
+                getline(ss, dateOfBirth, ',');
+                getline(ss, address, ',');
+                getline(ss, phone, ',');
+                getline(ss, email, ',');
+                EmployeeList.push_back(Employee(employeeID, position, salary, dateOfHire, name, dateOfBirth, address, phone, email));
+            }
+        }
+        input.close();
+        this->employeesList = EmployeeList;
+    };
+
+    void DisplayEmployeesList()
+    {
+        cout << setw(5) << left << "ID"
+             << setw(20) << left << "Ten nhan vien"
+             << setw(20) << left << "Chuc vu"
+             << setw(10) << left << "Luong"
+             << setw(15) << left << "Ngay tuyen"
+             << setw(15) << left << "Ngay Sinh"
+             << setw(20) << left << "Dia chi"
+             << setw(15) << left << "So dien thoai"
+             << setw(20) << left << "Email"
+             << endl;
+
+        for (int i = 0; i < this->employeesList.size(); i++)
+        {
+            cout << setw(5) << left << this->employeesList[i].getEmployeesId()
+                 << setw(20) << left << this->employeesList[i].getName()
+                 << setw(20) << left << this->employeesList[i].getPosition()
+                 << setw(10) << left << this->employeesList[i].getSalary()
+                 << setw(15) << left << this->employeesList[i].getDateOfHire()
+                 << setw(15) << left << this->employeesList[i].getDateOfBrith()
+                 << setw(20) << left << this->employeesList[i].getAddress()
+                 << setw(15) << left << this->employeesList[i].getPhone()
+                 << setw(20) << left << this->employeesList[i].getEmail()
+                 << endl;
+        }
     }
+
+    void addEmployee()
+    {
+        int n;
+        int employeeID;
+        string position;
+        float salary;
+        string dateOfHire;
+        string name;
+        string dateOfBirth;
+        string address;
+        string phone;
+        string email;
+
+        cout << "So luong nhan vien muon them: ";
+        cin >> n;
+
+        for (int i = 0; i < n; i++)
+        {
+            cin.ignore(32767, '\n');
+            employeeID = this->employeesList.back().getEmployeesId() + 1;
+
+            cout << "Nhan vien " << i + 1 << endl;
+            cout << "Nhap ten nhan vien: ";
+            getline(cin, name);
+            cout << "Chuc vu: ";
+            getline(cin, position);
+            cout << "Luong: ";
+            cin >> salary;
+            cin.ignore(32767, '\n');
+
+            cout << "Ngay tuyen: ";
+            getline(cin, dateOfHire);
+            cout << "Ngay sinh: ";
+            getline(cin, dateOfBirth);
+            cout << "Dia chi: ";
+            getline(cin, address);
+            cout << "So dien thoai: ";
+            getline(cin, phone);
+            cout << "Email: ";
+            getline(cin, email);
+
+            this->employeesList.push_back(Employee(employeeID, position, salary, dateOfHire, name, dateOfBirth, address, phone, email));
+        }
+    }
+
+    void removeEmployee()
+    {
+        int id;
+        cout << "Nhap ma nhan vien ban muon xoa: ";
+        cin >> id;
+        for (int i = 0; i < this->employeesList.size(); i++)
+        {
+            if (this->employeesList[i].getEmployeesId() == id)
+            {
+                this->employeesList.erase(this->employeesList.begin() + i);
+                return;
+            }
+        }
+    }
+
+    void loadCustomer(string filename)
+    {
+        vector<Customer> CustomerList;
+        int customerId;
+        string membershipLevel;
+        int point;
+        string name;
+        string dateOfBirth;
+        string address;
+        string phone;
+        string email;
+        string data;
+
+        fstream input(filename);
+        if (!input.is_open())
+        {
+            cout << "Can not read file!!!" << endl;
+        }
+        else
+        {
+            string line, data;
+            while (getline(input, line))
+            {
+                stringstream ss(line);
+
+                getline(ss, data, ',');
+                customerId = stoi(data);
+                getline(ss, membershipLevel, ',');
+                getline(ss, data, ',');
+                point = stoi(data);
+                getline(ss, name, ',');
+                getline(ss, dateOfBirth, ',');
+                getline(ss, address, ',');
+                getline(ss, phone, ',');
+                getline(ss, email, ',');
+                CustomerList.push_back(Customer(customerId, membershipLevel, point, name, dateOfBirth, address, phone, email));
+            }
+        }
+        input.close();
+        this->customerList = CustomerList;
+    };
+
+    void DisplayCustomerList()
+    {
+        cout << setw(5) << left << "ID"
+             << setw(20) << left << "Ten Khach hang"
+             << setw(20) << left << "Bac thanh vien"
+             << setw(10) << left << "Diem"
+             << setw(15) << left << "Ngay Sinh"
+             << setw(20) << left << "Dia chi"
+             << setw(15) << left << "So dien thoai"
+             << setw(20) << left << "Email"
+             << endl;
+
+        for (int i = 0; i < this->customerList.size(); i++)
+        {
+            cout << setw(5) << left << this->customerList[i].getCustomerId()
+                 << setw(20) << left << this->customerList[i].getName()
+                 << setw(20) << left << this->customerList[i].getMembershipLevel()
+                 << setw(10) << left << this->customerList[i].getPoint()
+                 << setw(15) << left << this->customerList[i].getDateOfBrith()
+                 << setw(20) << left << this->customerList[i].getAddress()
+                 << setw(15) << left << this->customerList[i].getPhone()
+                 << setw(20) << left << this->customerList[i].getEmail()
+                 << endl;
+        }
+    }
+
+    void addCustomer()
+    {
+        int n;
+        int customerId;
+        string membershipLevel;
+        int point;
+        string name;
+        string dateOfBirth;
+        string address;
+        string phone;
+        string email;
+
+        cout << "So luong Khach hang muon them: ";
+        cin >> n;
+
+        for (int i = 0; i < n; i++)
+        {
+            cin.ignore(32767, '\n');
+            customerId = this->customerList.back().getCustomerId() + 1;
+
+            cout << "Khach hang " << i + 1 << endl;
+            cout << "Nhap ten Khach hang: ";
+            getline(cin, name);
+            cout << "Bac thanh vien: ";
+            getline(cin, membershipLevel);
+            cout << "Diem: ";
+            cin >> point;
+            cin.ignore(32767, '\n');
+
+            cout << "Ngay sinh: ";
+            getline(cin, dateOfBirth);
+            cout << "Dia chi: ";
+            getline(cin, address);
+            cout << "So dien thoai: ";
+            getline(cin, phone);
+            cout << "Email: ";
+            getline(cin, email);
+
+            this->customerList.push_back(Customer(customerId, membershipLevel, point, name, dateOfBirth, address, phone, email));
+        }
+    }
+
+    void removeCustomer()
+    {
+        int id;
+        cout << "Nhap ma khach hang ban muon xoa: ";
+        cin >> id;
+        for (int i = 0; i < this->customerList.size(); i++)
+        {
+            if (this->customerList[i].getCustomerId() == id)
+            {
+                this->customerList.erase(this->customerList.begin() + i);
+                return;
+            }
+        }
+    }
+    //
 };
 int main()
 {
-    // Employee a(1, "a", 2.3, "b", "c", "d", "e", "f", "g");
+    ProductFile data;
+    // Load data product
+    ControllProduct ProductController(data.loadProduct("product.csv"));
 
-    // cout << a.getName() << " "
-    //      << a.getDateOfBrith() << " "
-    //      << a.getAddress() << " "
-    //      << a.getPhone() << " "
-    //      << a.getEmail() << endl;
+    Store StoreController;
+    // Load data employees
+    StoreController.loadEmployee("employee.csv");
+
+    // Load data customer
+    StoreController.loadCustomer("customers.csv");
 
     int choice;
+    int option;
     do
     {
+        system("cls");
         cout << "\n\tVui lòng lự chọn một số option:";
         cout << "\n\t\t1.Quản lí Nhân viên ";
         cout << "\n\t\t2.Quản lí Khách hàng ";
@@ -651,127 +869,122 @@ int main()
         switch (choice)
         {
         case 1:
-            system("clear");
-            int a;
-            cout << "\n\tVui lòng lự chọn một số option:";
-            cout << "\n\t\t1.Thêm thông tin nhân viên mới ";
-            cout << "\n\t\t2.Xoá thông tin nhân viên ";
-            cout << "\n\t\t3.Sửa thông tin nhân viên ";
-            cout << "\n\t\t4.Lùi lại ";
-            cout << "\n\t\t5.Thoát";
-            cout << "\n\t Nhập vào sự lựa chọn của bạn: ";
-            cin >> a;
-            switch (a)
+            do
             {
-            case 1:
-                /* code */
-                break;
-            case 2:
-                /* code */
-                break;
-            case 3:
-                /* code */
-                break;
-            case 4:
-                system("clear");
-                break;
-            default:
-                exit(1);
-            }
+                system("cls");
+                StoreController.DisplayEmployeesList();
+
+                cout << "\n\tVui lòng lự chọn một số option:";
+                cout << "\n\t\t1.Thêm thông tin nhân viên mới ";
+                cout << "\n\t\t2.Xoá thông tin nhân viên ";
+                cout << "\n\t\t3.Lùi lại ";
+
+                cout << "\n\n\t Nhập vào sự lựa chọn của bạn: ";
+                cin >> option;
+                switch (option)
+                {
+                case 1:
+                    StoreController.addEmployee();
+                    system("cls");
+                    StoreController.DisplayEmployeesList();
+                    break;
+                case 2:
+                    StoreController.removeEmployee();
+                    system("cls");
+                    StoreController.DisplayEmployeesList();
+                    break;
+                case 3:
+                    break;
+                }
+            } while (option != 3);
             break;
         case 2:
-            system("clear");
-            int b;
-            cout << "\n\tVui lòng lự chọn một số option:";
-            cout << "\n\t\t1.Thêm thông tin khách hàng mới ";
-            cout << "\n\t\t2.Xoá thông tin khách hàng ";
-            cout << "\n\t\t3.Sửa thông tin khách hàng ";
-            cout << "\n\t\t4.Lùi lại";
-            cout << "\n\t\t5.Thoát";
-            cout << "\n\t Nhập vào sự lựa chọn của bạn: ";
-            cin >> b;
-            switch (b)
+            do
             {
-            case 1:
-                /* code */
-                break;
-            case 2:
-                /* code */
-                break;
-            case 3:
-                /* code */
-                break;
-            case 4:
-                system("clear");
-                break;
-            default:
-                exit(1);
-            }
+                system("cls");
+                StoreController.DisplayCustomerList();
+
+                cout << "\n\tVui lòng lự chọn một số option:";
+                cout << "\n\t\t1.Thêm thông tin khách hàng mới ";
+                cout << "\n\t\t2.Xoá thông tin khách hàng ";
+                cout << "\n\t\t3.Lùi lại ";
+
+                cout << "\n\n\t Nhập vào sự lựa chọn của bạn: ";
+                cin >> option;
+                switch (option)
+                {
+                case 1:
+                    StoreController.addCustomer();
+                    system("cls");
+                    StoreController.DisplayCustomerList();
+                    break;
+                case 2:
+                    StoreController.removeCustomer();
+                    system("cls");
+                    StoreController.DisplayCustomerList();
+                    break;
+                case 3:
+                    break;
+                }
+            } while (option != 3);
             break;
         case 3:
-            system("clear");
-            int c;
-            cout << "\n\tVui lòng lự chọn một số option:";
-            cout << "\n\t\t1.Thêm thông tin sản phẩm mới trong kho hàng";
-            cout << "\n\t\t2.Xoá thông tin sản phẩm trong kho hàng";
-            cout << "\n\t\t3.Sửa thông tin sản phẩm trong kho hàng";
-            cout << "\n\t\t4.Lùi lại";
-            cout << "\n\t\t5.Thoát";
-            cout << "\n\t Nhập vào sự lựa chọn của bạn: ";
-            cin >> c;
-            switch (c)
+            do
             {
-            case 1:
-                /* code */
-                break;
-            case 2:
-                /* code */
-                break;
-            case 3:
-                /* code */
-                break;
-            case 4:
-                system("clear");
-                break;
-            default:
-                exit(1);
-            }
+                system("cls");
+
+                cout << "\n\tVui lòng lự chọn một số option:";
+                cout << "\n\t\t1.Thêm thông tin đặt hàng";
+                cout << "\n\t\t2.Xoá thông tin đặt hàng";
+                cout << "\n\t\t3.Lùi lại ";
+
+                cout << "\n\n\t Nhập vào sự lựa chọn của bạn: ";
+                cin >> option;
+                switch (option)
+                {
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+                    break;
+                }
+            } while (option != 3);
             break;
         case 4:
-            system("clear");
-            int d;
-            cout << "\n\tVui lòng lự chọn một số option:";
-            cout << "\n\t\t1.Xem đơn đặt hàng của khách hàng";
-            cout << "\n\t\t2.Thêm đơn đặt hàng của khách hàng";
-            cout << "\n\t\t3.Sửa đơn đặt hàng của khách hàng";
-            cout << "\n\t\t4.Xoá đơn đặt hàng của khách hàng";
-            cout << "\n\t\t5.Lùi lại";
-            cout << "\n\t\t6.Thoát";
-            cout << "\n\t Nhập vào sự lựa chọn của bạn: ";
-            cin >> d;
-            switch (d)
+            do
             {
-            case 1:
-                /* code */
-                break;
-            case 2:
-                /* code */
-                break;
-            case 3:
-                /* code */
-                break;
-            case 4:
-                /* code */
-                break;
-            case 5:
-                system("clear");
-                break;
-            default:
-                exit(1);
-            }
+                system("cls");
+                ProductController.Display();
+
+                cout << "\n\tVui lòng lự chọn một số option:";
+                cout << "\n\t\t1.Thêm thông tin sản phẩm mới ";
+                cout << "\n\t\t2.Xoá thông tin sản phẩm ";
+                cout << "\n\t\t3.Lùi lại ";
+
+                cout << "\n\n\t Nhập vào sự lựa chọn của bạn: ";
+                cin >> option;
+                switch (option)
+                {
+                case 1:
+                    ProductController.addProduct();
+                    system("cls");
+                    ProductController.Display();
+                    break;
+                case 2:
+                    ProductController.removeProduct();
+                    system("cls");
+                    ProductController.Display();
+                    break;
+                case 3:
+                    break;
+                }
+            } while (option != 3);
             break;
         case 5:
-            system("clear");
+            system("cls");
             cout << "\tNếu bạn đang bị lỗi lầm gì. Xin hãy liên hệ cho sđt này: 08888888889, chúng tôi sẽ lắng nghe bạn 24/24";
             cout << "\n\tCảm ơn bạn đã lắng nghe và ủng hộ chúng tôi!!";
             int e;
@@ -780,7 +993,7 @@ int main()
             switch (e)
             {
             case 0:
-                system("clear");
+                system("cls");
                 break;
             case 1:
                 exit(1);
@@ -800,5 +1013,6 @@ int main()
         }
     } while (choice <= 7);
     cout << "Cảm ơn bạn đã ủng hộ chúng tôi!!";
+
     return 0;
 }
