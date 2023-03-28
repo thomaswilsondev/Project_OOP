@@ -10,29 +10,203 @@ using namespace std;
 class Person
 {
 private:
-protected:
+    // Attribute
+
+    string name;
+    string dateOfBirth;
+    string address;
+    string phone;
+    string email;
+
 public:
+    // Contructor
+    Person(){};
+
+    Person(string name, string dateOfBirth, string address, string phone, string email)
+    {
+        this->name = name;
+        this->dateOfBirth = dateOfBirth;
+        this->address = address;
+        this->phone = phone;
+        this->email = email;
+    }
+    // Destructor
+    ~Person(){};
+
+    // Setter
+    void setName(string name)
+    {
+        this->name = name;
+    }
+
+    void setDateOfBrith(string dateOfBrith)
+    {
+        this->dateOfBirth = dateOfBirth;
+    }
+
+    void setAddress(string address)
+    {
+        this->address = address;
+    }
+
+    void setPhone(string phoneNumber)
+    {
+        this->phone = phoneNumber;
+    }
+
+    void setEmail(string email)
+    {
+        this->email = email;
+    }
+
+    // Getter
+
+    string getName()
+    {
+        return this->name;
+    }
+
+    string getDateOfBrith()
+    {
+        return this->dateOfBirth;
+    }
+
+    string getAddress()
+    {
+        return this->address;
+    }
+
+    string getPhone()
+    {
+        return this->phone;
+    }
+
+    string getEmail()
+    {
+        return this->email;
+    }
 };
 
-class Store
+class Employee : public Person
 {
 private:
-protected:
+    int employeeID;
+    string position;
+    float salary;
+    string dateOfHire;
+
 public:
+    // Contructor
+
+    Employee() {}
+
+    Employee(int employeeID, string position, float salary, string dateOfHire, string name, string dateOfBirth, string address, string phone, string email) : Person(name, dateOfBirth, address, phone, email)
+    {
+        this->employeeID = employeeID;
+        this->position = position;
+        this->salary = salary;
+        this->dateOfHire = dateOfHire;
+    }
+
+    // Destructor
+    ~Employee(){};
+
+    // Setter
+    void setEmployeeID(int employeeID)
+    {
+        this->employeeID = employeeID;
+    }
+
+    void setPosition(string position)
+    {
+        this->position = position;
+    }
+
+    void setSalary(float salary)
+    {
+        this->salary = salary;
+    }
+
+    void setDateOfHire(string dateOfHire)
+    {
+        this->dateOfHire = dateOfHire;
+    }
+
+    // Getter
+
+    int getEmployeesId()
+    {
+        return this->employeeID;
+    }
+
+    string getPosition()
+    {
+        return this->position;
+    }
+
+    float getSalary()
+    {
+        return this->salary;
+    }
+
+    string getDateOfHire()
+    {
+        return this->dateOfHire;
+    }
 };
 
 class Customer : public Person
 {
 private:
-protected:
-public:
-};
+    int customerId;
+    string membershipLevel;
+    int point;
 
-class Employee
-{
-private:
-protected:
 public:
+    // Contructor
+    Customer() {}
+
+    Customer(int customerId, string membershipLevel, int point, string name, string dateOfBirth, string address, string phone, string email) : Person(name, dateOfBirth, address, phone, email)
+    {
+        this->customerId = customerId;
+        this->membershipLevel = membershipLevel;
+        this->point = point;
+    }
+
+    // Destrustor
+    ~Customer() {}
+
+    // Setter
+    void setCustomerId(int customerId)
+    {
+        this->customerId = customerId;
+    }
+
+    void setMembershipLevel(string membershipLevel)
+    {
+        this->membershipLevel = membershipLevel;
+    }
+
+    void setPoint(int point)
+    {
+        this->point = point;
+    }
+
+    // Getter
+    int getCustomerId()
+    {
+        return this->customerId;
+    }
+
+    string getMembershipLevel()
+    {
+        return this->membershipLevel;
+    }
+
+    int getPoint()
+    {
+        return this->point;
+    }
 };
 
 class Supplier : public Person
@@ -466,46 +640,38 @@ public:
         cout << "San pham khong ton tai" << endl;
     }
 };
+
+class Store
+{
+private:
+    vector<Employee> employeesList;
+    vector<Customer> customerList;
+    vector<Supplier> supplierList;
+    vector<Order> orderList;
+
+public:
+    // Contructor
+    Store() {}
+
+    // Destructor
+    ~Store() {}
+
+    // Method
+
+    void addEmployee(Employee employee)
+    {
+        this->employeesList.push_back(employee);
+    }
+};
 int main()
 {
-    // string filename = "product.csv";
-    // ProductFile data;
-    vector<Product> dataProduct = data.loadProduct(filename);
+    Employee a(1, "a", 2.3, "b", "c", "d", "e", "f", "g");
 
-    // cout << "Dau vao" << endl;
-    // ControllProduct controller();
-    // controller.Display();
-
-    // cout << "\n\nSau khi them" << endl;
-
-    // controller.addProduct(Product(7, "Cat", "Cat bien vung tau", "Cat ok xay nha bao dep", 1000, 100));
-    // controller.Display();
-
-    // cout << "\n\nSau khi xoa" << endl;
-    // controller.removeProduct(5);
-    // controller.Display();
-
-    //--------------Supplier----------------------
-    // Supplier s(1, "ABC Company", "123456");
-    // cout << "Supplier ID: " << s.getSupplierId() << endl;
-    // cout << "Company Name: " << s.getCompanyName() << endl;
-    // cout << "Tax Code: " << s.getTaxCode() << endl;
-    // s.setCompanyName("XYZ Company");
-    // cout << "New Company Name: " << s.getCompanyName() << endl;
-
-    controller.addProduct(Product(7, "Cat", "Cat bien vung tau", "Cat ok xay nha bao dep", 1000, 100));
-
-    controller.Display();
-
-    //---------------Order---------------------------
-    // OrderItem oi1(1, "Product A", 2, 10);
-    // OrderItem oi2(2, "Product B", 3, 20);
-    // vector<OrderItem> items = {oi1, oi2};
-    // Order o(1, "Customer A", items, "2022-01-01");
-    // cout << "Order ID: " << o.getOrderId() << endl;
-    // cout << "Customer: " << o.getCustomer() << endl;
-    // o.getOrderItem(items);
-    // cout << "\nTotal Price: " << o.getTotalPrice(items) << endl;
+    cout << a.getName() << " "
+         << a.getDateOfBrith() << " "
+         << a.getAddress() << " "
+         << a.getPhone() << " "
+         << a.getEmail() << endl;
 
     return 0;
 }
