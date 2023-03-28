@@ -39,7 +39,7 @@ public:
         this->name = name;
     }
 
-    void setDateOfBrith(string dateOfBrith)
+    void setDateOfBrith(string dateOfBirth)
     {
         this->dateOfBirth = dateOfBirth;
     }
@@ -207,42 +207,6 @@ public:
     {
         return this->point;
     }
-};
-
-class Supplier : public Person
-{
-private:
-    int supplierId;
-    string companyName;
-    string taxCode;
-
-protected:
-public:
-    // Getter
-    int getSupplierId() { return supplierId; };
-    string getCompanyName() { return companyName; };
-    string getTaxCode() { return taxCode; };
-    // Setter
-    void setSupplierId(int supplierId)
-    {
-        this->supplierId = supplierId;
-    };
-    void setCompanyName(string companyName)
-    {
-        this->companyName = companyName;
-    }
-    void setTaxCode(string taxCode)
-    {
-        this->taxCode = taxCode;
-    }
-    // Contructor
-    Supplier(int supplierId, string companyName, string taxCode)
-    {
-        this->supplierId = supplierId;
-        this->companyName = companyName;
-        this->taxCode = taxCode;
-    }
-    ~Supplier(){};
 };
 class OrderItem : public Person
 {
@@ -646,7 +610,6 @@ class Store
 private:
     vector<Employee> employeesList;
     vector<Customer> customerList;
-    vector<Supplier> supplierList;
     vector<Order> orderList;
 
 public:
@@ -665,13 +628,176 @@ public:
 };
 int main()
 {
-    Employee a(1, "a", 2.3, "b", "c", "d", "e", "f", "g");
+    // Employee a(1, "a", 2.3, "b", "c", "d", "e", "f", "g");
 
-    cout << a.getName() << " "
-         << a.getDateOfBrith() << " "
-         << a.getAddress() << " "
-         << a.getPhone() << " "
-         << a.getEmail() << endl;
+    // cout << a.getName() << " "
+    //      << a.getDateOfBrith() << " "
+    //      << a.getAddress() << " "
+    //      << a.getPhone() << " "
+    //      << a.getEmail() << endl;
 
+    int choice;
+    do
+    {
+        cout << "\n\tVui lòng lự chọn một số option:";
+        cout << "\n\t\t1.Quản lí Nhân viên ";
+        cout << "\n\t\t2.Quản lí Khách hàng ";
+        cout << "\n\t\t3.Quản lí đơn đặt hàng";
+        cout << "\n\t\t4.Quản lí kho hàng";
+        cout << "\n\t\t5.Thông tin liên hệ chăm sóc khách hàng ";
+        cout << "\n\t\t6.Thoát";
+        cout << "\n\t Nhập vào sự lựa chọn của bạn: ";
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            system("clear");
+            int a;
+            cout << "\n\tVui lòng lự chọn một số option:";
+            cout << "\n\t\t1.Thêm thông tin nhân viên mới ";
+            cout << "\n\t\t2.Xoá thông tin nhân viên ";
+            cout << "\n\t\t3.Sửa thông tin nhân viên ";
+            cout << "\n\t\t4.Lùi lại ";
+            cout << "\n\t\t5.Thoát";
+            cout << "\n\t Nhập vào sự lựa chọn của bạn: ";
+            cin >> a;
+            switch (a)
+            {
+            case 1:
+                /* code */
+                break;
+            case 2:
+                /* code */
+                break;
+            case 3:
+                /* code */
+                break;
+            case 4:
+                system("clear");
+                break;
+            default:
+                exit(1);
+            }
+            break;
+        case 2:
+            system("clear");
+            int b;
+            cout << "\n\tVui lòng lự chọn một số option:";
+            cout << "\n\t\t1.Thêm thông tin khách hàng mới ";
+            cout << "\n\t\t2.Xoá thông tin khách hàng ";
+            cout << "\n\t\t3.Sửa thông tin khách hàng ";
+            cout << "\n\t\t4.Lùi lại";
+            cout << "\n\t\t5.Thoát";
+            cout << "\n\t Nhập vào sự lựa chọn của bạn: ";
+            cin >> b;
+            switch (b)
+            {
+            case 1:
+                /* code */
+                break;
+            case 2:
+                /* code */
+                break;
+            case 3:
+                /* code */
+                break;
+            case 4:
+                system("clear");
+                break;
+            default:
+                exit(1);
+            }
+            break;
+        case 3:
+            system("clear");
+            int c;
+            cout << "\n\tVui lòng lự chọn một số option:";
+            cout << "\n\t\t1.Thêm thông tin sản phẩm mới trong kho hàng";
+            cout << "\n\t\t2.Xoá thông tin sản phẩm trong kho hàng";
+            cout << "\n\t\t3.Sửa thông tin sản phẩm trong kho hàng";
+            cout << "\n\t\t4.Lùi lại";
+            cout << "\n\t\t5.Thoát";
+            cout << "\n\t Nhập vào sự lựa chọn của bạn: ";
+            cin >> c;
+            switch (c)
+            {
+            case 1:
+                /* code */
+                break;
+            case 2:
+                /* code */
+                break;
+            case 3:
+                /* code */
+                break;
+            case 4:
+                system("clear");
+                break;
+            default:
+                exit(1);
+            }
+            break;
+        case 4:
+            system("clear");
+            int d;
+            cout << "\n\tVui lòng lự chọn một số option:";
+            cout << "\n\t\t1.Xem đơn đặt hàng của khách hàng";
+            cout << "\n\t\t2.Thêm đơn đặt hàng của khách hàng";
+            cout << "\n\t\t3.Sửa đơn đặt hàng của khách hàng";
+            cout << "\n\t\t4.Xoá đơn đặt hàng của khách hàng";
+            cout << "\n\t\t5.Lùi lại";
+            cout << "\n\t\t6.Thoát";
+            cout << "\n\t Nhập vào sự lựa chọn của bạn: ";
+            cin >> d;
+            switch (d)
+            {
+            case 1:
+                /* code */
+                break;
+            case 2:
+                /* code */
+                break;
+            case 3:
+                /* code */
+                break;
+            case 4:
+                /* code */
+                break;
+            case 5:
+                system("clear");
+                break;
+            default:
+                exit(1);
+            }
+            break;
+        case 5:
+            system("clear");
+            cout << "\tNếu bạn đang bị lỗi lầm gì. Xin hãy liên hệ cho sđt này: 08888888889, chúng tôi sẽ lắng nghe bạn 24/24";
+            cout << "\n\tCảm ơn bạn đã lắng nghe và ủng hộ chúng tôi!!";
+            int e;
+            cout << "\n\tVui lòng nhấn 0 để lùi lại hoặc nhấn 1 để lùi lại:";
+            cin >> e;
+            switch (e)
+            {
+            case 0:
+                system("clear");
+                break;
+            case 1:
+                exit(1);
+            default:
+                cout << "Vui lòng bạn nhập lại vì bạn đã nhập sai cú pháp !!!" << endl;
+                cout << "Nhập lại: ";
+                cin >> e;
+                break;
+            }
+            break;
+        case 6:
+            exit(1);
+            break;
+        default:
+            cout << "Vui lòng nhập lại!!";
+            break;
+        }
+    } while (choice <= 7);
     return 0;
 }
