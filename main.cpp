@@ -799,5 +799,6 @@ int main()
             break;
         }
     } while (choice <= 7);
+    cout << "Cảm ơn bạn đã ủng hộ chúng tôi!!";
     return 0;
 }
