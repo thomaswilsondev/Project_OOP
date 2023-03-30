@@ -5,6 +5,10 @@
 #include <sstream>
 #include <iomanip>
 #include <ctime>
+#include <algorithm>
+#include <iomanip>
+#include <stdlib.h>
+#include <cstdlib>
 using namespace std;
 
 class Person
@@ -20,7 +24,20 @@ private:
 
 public:
     // Contructor
-    Person(){};
+    Person() {}
+    Person(string n, string a, string p)
+        : name(n), address(a), phone(p) {}
+
+    string getName() const { return name; }
+    string getAddress() const { return address; }
+    string getPhoneNumber() const { return phone; }
+
+    virtual void display() const
+    {
+        cout << "Ten: " << name << endl;
+        cout << "Dia chi: " << address << endl;
+        cout << "So dien thoat: " << phone << endl;
+    }
 
     Person(string name, string dateOfBirth, string address, string phone, string email)
     {
@@ -61,24 +78,9 @@ public:
 
     // Getter
 
-    string getName()
-    {
-        return this->name;
-    }
-
     string getDateOfBrith()
     {
         return this->dateOfBirth;
-    }
-
-    string getAddress()
-    {
-        return this->address;
-    }
-
-    string getPhone()
-    {
-        return this->phone;
     }
 
     string getEmail()
@@ -208,155 +210,309 @@ public:
         return this->point;
     }
 };
-class OrderItem : public Person
+class OrderItem
 {
 private:
-    int orderItemId;
-    string product;
+    string name;
+    double price;
     int quantity;
-    int price;
 
-protected:
 public:
-    // GETTER
-    int getOrderItemId() { return orderItemId; };
-    string getProduct() { return product; };
-    int getQuantity() { return quantity; };
-    double getPrice() { return price; };
-    // SETTER
-    void setOrderItemId(int orderItemId)
-    {
-        this->orderItemId = orderItemId;
-    }
-    void setProduct(string product)
-    {
-        this->product = product;
-    }
-    void setQuantity(int quantity)
-    {
-        this->quantity = quantity;
-    }
-    void setPrice(int price)
-    {
-        this->price = price;
-    }
+    OrderItem() {}
+    OrderItem(string n, double p, int q)
+        : name(n), price(p), quantity(q) {}
 
-    // CONTRUCTOR
-    OrderItem(int orderItemId, string product, int quantity, int price)
+    string getName() const { return name; }
+    double getPrice() const { return price; }
+    int getQuantity() const { return quantity; }
+    void setQuantity(int q) { quantity = q; }
+    void setPrice(double p) { price = p; }
+    double getTotalPrice() const { return price * quantity; }
+
+    void display() const
     {
-        this->orderItemId = orderItemId;
-        this->product = product;
-        this->quantity = quantity;
-        this->price = price;
+        cout << setw(20) << left << name
+             << setw(10) << right << price
+             << setw(10) << quantity
+             << setw(10) << getTotalPrice() << endl;
     }
 };
 class Order
 {
 private:
-    int orderId;
-    string customer;
-    vector<OrderItem> orderItem;
-    vector<OrderItem> totalPrice;
-    string orderDate;
+    int id;
+    Person customer;
+    vector<OrderItem> items;
 
-protected:
 public:
-    int indexOrderID = 0;
-    // GETTER
-    int getOrderId() { return orderId; };
-    string getCustomer() { return customer; };
-    void getOrderItem(vector<OrderItem> orderItem)
+    Order() {}
+    Order(int i, Person c) : id(i), customer(c) {}
+
+    int getId() const { return id; }
+
+    void addItem(OrderItem item) { items.push_back(item); }
+    void removeItem(int index) { items.erase(items.begin() + index); }
+
+    double getTotalPrice() const
     {
-        for (int i = 0; i < orderItem.size(); i++)
+        double total = 0;
+        for (const auto &item : items)
         {
-            cout << "Product " << orderItem[i].getOrderItemId() << " :"
-                 << orderItem[i].getProduct() << " ,"
-                 << orderItem[i].getQuantity() << " ,"
-                 << orderItem[i].getPrice();
+            total += item.getTotalPrice();
         }
-    }
-    int getTotalPrice(vector<OrderItem> orderItem)
-    {
-        int sum = 0;
-        for (int i = 0; i < orderItem.size(); i++)
-        {
-            sum = sum + orderItem[i].getPrice() * orderItem[i].getQuantity();
-        }
-        return sum;
-    }
-    void getOrderDate(string orderDate)
-    {
-        this->orderDate = orderDate;
-    }
-    // SETTER
-    int setTotalPrice(vector<OrderItem> orderItem, int tip)
-    {
-        int total = getTotalPrice(orderItem) + getTotalPrice(orderItem) * (tip / 100);
         return total;
     }
-    void setCustomer(string customer)
+    void modifyItemQuantity(int index, int newQuantity)
     {
-        this->customer = customer;
-    }
-    void setOrderID()
-    {
-        this->orderId = indexOrderID++;
-    }
-    void setOrderItem(vector<OrderItem> orderItem)
-    {
-        for (int i = 0; i < orderItem.size(); i++)
+        if (index >= 0 && index < items.size())
         {
-            string producer;
-            int quantity = 0;
-            double price = 0;
-            orderItem[i].setOrderItemId(i);
-            cout << "Product " << orderItem[i].getOrderItemId() << endl;
-            cout << "Enter name Producer: ";
-            cin >> producer;
-            orderItem[i].setProduct(producer);
-            cout << "Enter Quantity: ";
-            cin >> quantity;
-            orderItem[i].setQuantity(quantity);
-            cout << "Enter Price: ";
-            cin >> price;
-            orderItem[i].setPrice(price);
-            cout << "\n\n";
+            items[index].setQuantity(newQuantity);
         }
     }
-    void setOrderDate()
+
+    void modifyItemPrice(int index, double newPrice)
     {
-        time_t now = time(0);
-        tm *ltm = localtime(&now);
-        cout << "Time: " << ltm->tm_sec << endl;
-        cout << "Date: " << ltm->tm_mday << "/" << 1 + ltm->tm_mon << "/" << 1900 + ltm->tm_year;
+        if (index >= 0 && index < items.size())
+        {
+            items[index].setPrice(newPrice);
+        }
     }
-    void addOrderIteam(vector<OrderItem> orderItem)
+    void display() const
     {
-        string producer;
-        int quantity = 0;
-        double price = 0;
-        orderItem[orderItem.size()].setOrderItemId(orderItem.size());
-        cout << "Product " << orderItem[orderItem.size()].getOrderItemId() << endl;
-        cout << "Enter name Producer: ";
-        cin >> producer;
-        orderItem[orderItem.size()].setProduct(producer);
-        cout << "Enter Quantity: ";
-        cin >> quantity;
-        orderItem[orderItem.size()].setQuantity(quantity);
-        cout << "Enter Price: ";
-        cin >> price;
-        orderItem[orderItem.size()].setPrice(price);
-        cout << "\n\n";
+        cout << "Id don hang: " << id << endl;
+        customer.display();
+
+        cout << "\nOrder items:\n";
+        cout << setw(20) << left << "Ten"
+             << setw(10) << right << "Gia"
+             << setw(10) << "So luong"
+             << setw(10) << "Tong cong" << endl;
+        for (const auto &item : items)
+        {
+            item.display();
+        }
+        cout << setw(40) << right << "Tong cong: " << getTotalPrice() << endl;
     }
-    // CONTRUCTOR
-    Order(int orderId, string customer, vector<OrderItem> orderItem, string orderDate)
+    void modifyItem(int index, int newQuantity)
     {
-        this->orderId = orderId;
-        this->customer = customer;
-        this->orderItem = orderItem;
-        this->orderDate = orderDate;
+        if (index >= 0 && index < items.size())
+        {
+            items[index].setQuantity(newQuantity);
+        }
     }
 };
+
+void displayOrders(const vector<Order> &orders)
+{
+    if (orders.empty())
+    {
+        cout << "Khong tim thay don hang ban muon !!!\n";
+        return;
+    }
+
+    for (int i = 0; i < orders.size(); ++i)
+    {
+        cout << "Order " << i + 1 << ":\n";
+        orders[i].display();
+        cout << endl;
+    }
+}
+void addOrder(vector<Order> &orders)
+{
+    int customer_id;
+    double product_price;
+    int product_id, quantity;
+    string customer_name, customer_address, customer_phoneNumber, product_name;
+    char addMore;
+
+    cout << "\n\n\tThem don hang moi";
+    cout << "\n\n\tThong tin khach hang";
+    cout << "\n\tNhap id khach hang: ";
+    cin >> customer_id;
+    cout << "\tNhap ten khach hang: ";
+    cin.ignore();
+    getline(cin, customer_name);
+    cout << "\tNhap dia chi khach hang: ";
+    getline(cin, customer_address);
+    cout << "\tNhap sdt khach hang: ";
+    getline(cin, customer_phoneNumber);
+
+    Person customer(customer_name, customer_address, customer_phoneNumber);
+    Order order(customer_id, customer);
+
+    do
+    {
+        cout << "\n\tThong tin san pham";
+        cout << "\n\tNhap id san pham: ";
+        cin >> product_id;
+        cout << "\tNhap ten san pham: ";
+        cin.ignore();
+        getline(cin, product_name);
+        cout << "\tNhap gia san pham: ";
+        cin >> product_price;
+        cout << "\tNhap so luong: ";
+        cin >> quantity;
+
+        OrderItem order_item(product_name, product_price, quantity);
+        order.addItem(order_item);
+
+        cout << "\n\tBan muon nhap them san pham khong? (y/n): ";
+        cin >> addMore;
+    } while (addMore == 'y' || addMore == 'Y');
+
+    orders.push_back(order);
+
+    cout << "\n\tDon hang da them vao thang cong" << endl;
+}
+void modifyOrder(vector<Order> &orders)
+{
+    int orderId, itemIndex, newQuantity;
+    double newPrice;
+    bool found = false;
+    int option;
+    string product_name;
+    double product_price;
+    int quantity;
+
+    displayOrders(orders);
+
+    cout << "\nNhap id don hang ban muon sua: ";
+    cin >> orderId;
+
+    for (auto &order : orders)
+    {
+        if (order.getId() == orderId)
+        {
+            found = true;
+            cout << "\n\tVui long lua chon option:";
+            cout << "\n\t\t1. Them mon hang";
+            cout << "\n\t\t2. Xoa mon hang";
+            cout << "\n\t\t3. Chinh sua gia tri so luong don hang";
+            cout << "\n\t\t4. Chinh sua gia tri gia don hang";
+            cout << "\n\n\tOption: ";
+            cin >> option;
+
+            switch (option)
+            {
+            case 1:
+
+                cout << "\n\tThong tin san pham";
+                cout << "\n\tNhap ten san pham: ";
+                cin.ignore();
+                getline(cin, product_name);
+                cout << "\tNhap gia san pham: ";
+                cin >> product_price;
+                cout << "\tNhap so luong: ";
+                cin >> quantity;
+
+                order.addItem(OrderItem(product_name, product_price, quantity));
+                break;
+            case 2:
+
+                cout << "\nNhap chi so mon hang ban muon xoa: ";
+                cin >> itemIndex;
+                order.removeItem(itemIndex);
+                break;
+            case 3:
+
+                cout << "\nNhap chi so mon hang ban muon chinh sua: ";
+                cin >> itemIndex;
+                cout << "Nhap so luong moi ";
+                cin >> newQuantity;
+                order.modifyItemQuantity(itemIndex, newQuantity);
+                break;
+            case 4:
+
+                cout << "\nNhap chi so mon hang ban muon chinh sua ";
+                cin >> itemIndex;
+                cout << "Nhap gia tri moi: ";
+                cin >> newPrice;
+                order.modifyItemPrice(itemIndex, newPrice);
+                break;
+            }
+            break;
+        }
+    }
+
+    if (found)
+    {
+        cout << "\nChinh sua don hang thanh cong!";
+    }
+    else
+    {
+        cout << "\nKhong tim thay id!! " << orderId;
+    }
+
+    cout << endl;
+}
+void removeOrder(vector<Order> &orders)
+{
+    int orderId;
+    bool found = false;
+
+    displayOrders(orders);
+
+    cout << "\nNhap id don hang can xoa: ";
+    cin >> orderId;
+
+    for (auto it = orders.begin(); it != orders.end(); ++it)
+    {
+        if (it->getId() == orderId)
+        {
+            orders.erase(it);
+            found = true;
+            break;
+        }
+    }
+
+    if (found)
+    {
+        cout << "\nXoa don hang thanh cong";
+    }
+    else
+    {
+        cout << "\nKhong tim thay don hang co id tren!! " << orderId;
+    }
+
+    cout << endl;
+}
+
+void manageOrders()
+{
+    vector<Order> orders;
+    int option;
+    do
+    {
+
+        cout << "\n\tVui long lua chon mot so option:";
+        cout << "\n\t\t1. Them don hang moi";
+        cout << "\n\t\t2. Xoa don hang moi";
+        cout << "\n\t\t3. Hien thi don hang moi";
+        cout << "\n\t\t4. Chinh sua don hang";
+        cout << "\n\t\t5. Lui lai";
+        cout << "\n\n\tOption: ";
+        cin >> option;
+
+        switch (option)
+        {
+        case 1:
+            addOrder(orders);
+            break;
+        case 2:
+            displayOrders(orders);
+            removeOrder(orders);
+            break;
+        case 3:
+            displayOrders(orders);
+            break;
+        case 4:
+
+            displayOrders(orders);
+            modifyOrder(orders);
+            break;
+        }
+    } while (option != 5);
+}
 class Product
 {
 private:
@@ -647,7 +803,7 @@ public:
                  << setw(15) << left << this->employeesList[i].getDateOfHire()
                  << setw(15) << left << this->employeesList[i].getDateOfBrith()
                  << setw(20) << left << this->employeesList[i].getAddress()
-                 << setw(15) << left << this->employeesList[i].getPhone()
+                 << setw(15) << left << this->employeesList[i].getPhoneNumber()
                  << setw(20) << left << this->employeesList[i].getEmail()
                  << endl;
         }
@@ -775,7 +931,7 @@ public:
                  << setw(10) << left << this->customerList[i].getPoint()
                  << setw(15) << left << this->customerList[i].getDateOfBrith()
                  << setw(20) << left << this->customerList[i].getAddress()
-                 << setw(15) << left << this->customerList[i].getPhone()
+                 << setw(15) << left << this->customerList[i].getPhoneNumber()
                  << setw(20) << left << this->customerList[i].getEmail()
                  << endl;
         }
@@ -857,14 +1013,14 @@ int main()
     do
     {
         system("cls");
-        cout << "\n\tVui lòng lự chọn một số option:";
-        cout << "\n\t\t1.Quản lí Nhân viên ";
-        cout << "\n\t\t2.Quản lí Khách hàng ";
-        cout << "\n\t\t3.Quản lí đơn đặt hàng";
-        cout << "\n\t\t4.Quản lí kho hàng";
-        cout << "\n\t\t5.Thông tin liên hệ chăm sóc khách hàng ";
-        cout << "\n\t\t6.Thoát";
-        cout << "\n\t Nhập vào sự lựa chọn của bạn: ";
+        cout << "\n\tVui long nhap su lua chon cua ban:";
+        cout << "\n\t\t1.Quan li nhan vien";
+        cout << "\n\t\t2.Quan li khach hang ";
+        cout << "\n\t\t3.Quan li don hang";
+        cout << "\n\t\t4.Quan li kho hang";
+        cout << "\n\t\t5.Thong tin cham soc khach hang ";
+        cout << "\n\t\t6.Thoat";
+        cout << "\n\t Nhap su lua chon cua ban:";
         cin >> choice;
         switch (choice)
         {
@@ -874,12 +1030,12 @@ int main()
                 system("cls");
                 StoreController.DisplayEmployeesList();
 
-                cout << "\n\tVui lòng lự chọn một số option:";
-                cout << "\n\t\t1.Thêm thông tin nhân viên mới ";
-                cout << "\n\t\t2.Xoá thông tin nhân viên ";
-                cout << "\n\t\t3.Lùi lại ";
+                cout << "\n\tVui long nhap su lua chon cua ban:";
+                cout << "\n\t\t1.Them thong tin nhan vien moi ";
+                cout << "\n\t\t2.Xoa nhan vien moi ";
+                cout << "\n\t\t3.Lui lai ";
 
-                cout << "\n\n\t Nhập vào sự lựa chọn của bạn: ";
+                cout << "\n\n\t Nhap su lua chon cua ban: ";
                 cin >> option;
                 switch (option)
                 {
@@ -904,12 +1060,12 @@ int main()
                 system("cls");
                 StoreController.DisplayCustomerList();
 
-                cout << "\n\tVui lòng lự chọn một số option:";
-                cout << "\n\t\t1.Thêm thông tin khách hàng mới ";
-                cout << "\n\t\t2.Xoá thông tin khách hàng ";
-                cout << "\n\t\t3.Lùi lại ";
+                cout << "\n\tVui long nhap su lua chon cua ban:";
+                cout << "\n\t\t1.Them thong tin khach hang moi ";
+                cout << "\n\t\t2.Xoa thong tin khach hang ";
+                cout << "\n\t\t3.Lui lai ";
 
-                cout << "\n\n\t Nhập vào sự lựa chọn của bạn: ";
+                cout << "\n\n\t Nhap su lua chon cua ban: ";
                 cin >> option;
                 switch (option)
                 {
@@ -929,29 +1085,7 @@ int main()
             } while (option != 3);
             break;
         case 3:
-            do
-            {
-                system("cls");
-
-                cout << "\n\tVui lòng lự chọn một số option:";
-                cout << "\n\t\t1.Thêm thông tin đặt hàng";
-                cout << "\n\t\t2.Xoá thông tin đặt hàng";
-                cout << "\n\t\t3.Lùi lại ";
-
-                cout << "\n\n\t Nhập vào sự lựa chọn của bạn: ";
-                cin >> option;
-                switch (option)
-                {
-                case 1:
-
-                    break;
-                case 2:
-
-                    break;
-                case 3:
-                    break;
-                }
-            } while (option != 3);
+            manageOrders();
             break;
         case 4:
             do
@@ -959,12 +1093,12 @@ int main()
                 system("cls");
                 ProductController.Display();
 
-                cout << "\n\tVui lòng lự chọn một số option:";
-                cout << "\n\t\t1.Thêm thông tin sản phẩm mới ";
-                cout << "\n\t\t2.Xoá thông tin sản phẩm ";
-                cout << "\n\t\t3.Lùi lại ";
+                cout << "\n\tVui long nhap su lua chon cua ban:";
+                cout << "\n\t\t1.Them thong tin san pham moi";
+                cout << "\n\t\t2.Xoa thong tin san pham ";
+                cout << "\n\t\t3.Lui lai ";
 
-                cout << "\n\n\t Nhập vào sự lựa chọn của bạn: ";
+                cout << "\n\n\t Nhap su lua chon cua ban: ";
                 cin >> option;
                 switch (option)
                 {
@@ -985,10 +1119,10 @@ int main()
             break;
         case 5:
             system("cls");
-            cout << "\tNếu bạn đang bị lỗi lầm gì. Xin hãy liên hệ cho sđt này: 08888888889, chúng tôi sẽ lắng nghe bạn 24/24";
-            cout << "\n\tCảm ơn bạn đã lắng nghe và ủng hộ chúng tôi!!";
+            cout << "\tNeu ban co loi gi thi ban hay toi chung toi phong so 2 o khach san vtc chi nhanh Ho Chi Minh";
+            cout << "\n\tCam on ban da lang nghe chung toi!!";
             int e;
-            cout << "\n\tVui lòng nhấn 0 để lùi lại hoặc nhấn 1 để lùi lại:";
+            cout << "\n\tNhan 0 de lui lai hoac 1 la thoat";
             cin >> e;
             switch (e)
             {
@@ -998,8 +1132,8 @@ int main()
             case 1:
                 exit(1);
             default:
-                cout << "Vui lòng bạn nhập lại vì bạn đã nhập sai cú pháp !!!" << endl;
-                cout << "Nhập lại: ";
+                cout << "Ban nhap ngu vui long nhap lai !!!" << endl;
+                cout << "Nhap lai";
                 cin >> e;
                 break;
             }
@@ -1008,11 +1142,11 @@ int main()
             exit(1);
             break;
         default:
-            cout << "Vui lòng nhập lại!!";
+            cout << "Vui long nhap lai!!";
             break;
         }
     } while (choice <= 7);
-    cout << "Cảm ơn bạn đã ủng hộ chúng tôi!!";
+    cout << "Cam on ban nhei!!";
 
     return 0;
 }
