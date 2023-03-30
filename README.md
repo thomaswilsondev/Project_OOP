@@ -4,7 +4,7 @@
 
 ###
 
-<p align="right">My name is Bao .<br>I am the leader of Lùa Gà.<br>My group consists of 6 members including 1 leader, 1 secretary or 4 members.</p>
+<p align="right">My name is Bao .<br>I am the leader of Lùa Gà.<br>My group consists of 3 members including 1 leader, 2 members.</p>
 
 ###
 
