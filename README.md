@@ -14,10 +14,6 @@
 
 ###
 
-<img src="https://raw.githubusercontent.com/tho/tho/blob/output/snake.svg" alt="Snake animation" />
-
-###
-
 <p align="left"></p>
 
 ###
