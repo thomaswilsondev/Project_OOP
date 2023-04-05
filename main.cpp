@@ -56,11 +56,6 @@ public:
         this->name = name;
     }
 
-    void setDateOfBrith(string dateOfBirth)
-    {
-        this->dateOfBirth = dateOfBirth;
-    }
-
     void setAddress(string address)
     {
         this->address = address;
@@ -210,6 +205,7 @@ public:
         return this->point;
     }
 };
+//////// -------Order-Item
 class OrderItem
 {
 private:
@@ -483,10 +479,9 @@ void manageOrders()
     int option;
     do
     {
-
         cout << "\n\tVui long lua chon mot so option:";
         cout << "\n\t\t1. Them don hang moi";
-        cout << "\n\t\t2. Xoa don hang moi";
+        cout << "\n\t\t2. Xoa don hang";
         cout << "\n\t\t3. Hien thi don hang moi";
         cout << "\n\t\t4. Chinh sua don hang";
         cout << "\n\t\t5. Lui lai";
@@ -496,17 +491,22 @@ void manageOrders()
         switch (option)
         {
         case 1:
+            system("clear");
             addOrder(orders);
+            system("clear");
             break;
         case 2:
+            system("clear");
             displayOrders(orders);
             removeOrder(orders);
             break;
         case 3:
+            system("clear");
             displayOrders(orders);
             break;
         case 4:
 
+            system("clear");
             displayOrders(orders);
             modifyOrder(orders);
             break;
@@ -1012,7 +1012,7 @@ int main()
     int option;
     do
     {
-        system("cls");
+        system("clear");
         cout << "\n\tVui long nhap su lua chon cua ban:";
         cout << "\n\t\t1.Quan li nhan vien";
         cout << "\n\t\t2.Quan li khach hang ";
@@ -1027,12 +1027,12 @@ int main()
         case 1:
             do
             {
-                system("cls");
+                system("clear");
                 StoreController.DisplayEmployeesList();
 
                 cout << "\n\tVui long nhap su lua chon cua ban:";
                 cout << "\n\t\t1.Them thong tin nhan vien moi ";
-                cout << "\n\t\t2.Xoa nhan vien moi ";
+                cout << "\n\t\t2.Xoa nhan vien ";
                 cout << "\n\t\t3.Lui lai ";
 
                 cout << "\n\n\t Nhap su lua chon cua ban: ";
@@ -1041,12 +1041,12 @@ int main()
                 {
                 case 1:
                     StoreController.addEmployee();
-                    system("cls");
+                    system("clear");
                     StoreController.DisplayEmployeesList();
                     break;
                 case 2:
                     StoreController.removeEmployee();
-                    system("cls");
+                    system("clear");
                     StoreController.DisplayEmployeesList();
                     break;
                 case 3:
@@ -1057,7 +1057,7 @@ int main()
         case 2:
             do
             {
-                system("cls");
+                system("clear");
                 StoreController.DisplayCustomerList();
 
                 cout << "\n\tVui long nhap su lua chon cua ban:";
@@ -1071,12 +1071,12 @@ int main()
                 {
                 case 1:
                     StoreController.addCustomer();
-                    system("cls");
+                    system("clear");
                     StoreController.DisplayCustomerList();
                     break;
                 case 2:
                     StoreController.removeCustomer();
-                    system("cls");
+                    system("clear");
                     StoreController.DisplayCustomerList();
                     break;
                 case 3:
@@ -1085,12 +1085,13 @@ int main()
             } while (option != 3);
             break;
         case 3:
+            system("clear");
             manageOrders();
             break;
         case 4:
             do
             {
-                system("cls");
+                system("clear");
                 ProductController.Display();
 
                 cout << "\n\tVui long nhap su lua chon cua ban:";
@@ -1104,12 +1105,12 @@ int main()
                 {
                 case 1:
                     ProductController.addProduct();
-                    system("cls");
+                    system("clear");
                     ProductController.Display();
                     break;
                 case 2:
                     ProductController.removeProduct();
-                    system("cls");
+                    system("clear");
                     ProductController.Display();
                     break;
                 case 3:
@@ -1118,7 +1119,7 @@ int main()
             } while (option != 3);
             break;
         case 5:
-            system("cls");
+            system("clear");
             cout << "\tNeu ban co loi gi thi ban hay toi chung toi phong so 2 o khach san vtc chi nhanh Ho Chi Minh";
             cout << "\n\tCam on ban da lang nghe chung toi!!";
             int e;
@@ -1127,7 +1128,7 @@ int main()
             switch (e)
             {
             case 0:
-                system("cls");
+                system("clear");
                 break;
             case 1:
                 exit(1);
